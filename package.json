@@ -23,8 +23,9 @@
     "ferd-bart": "0.0.2",
     "ferd-giffy": "0.0.1",
     "ferd-hi": "0.0.1",
+    "ferd-presence": "0.0.1",
     "ferd-translate": "0.0.1",
-    "ferd-yo": "0.0.1",
+    "ferd-yo": "0.0.2",
     "mongoose": "^4.1.5",
     "morgan": "^1.6.1",
     "q": "^1.4.1",
@@ -44,6 +45,7 @@
     "bacon",
     "bart",
     "hi",
+    "presence",
     "translate",
     "yo"
   ]
