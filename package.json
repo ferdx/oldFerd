@@ -21,6 +21,7 @@
     "extend": "^3.0.0",
     "ferd-bacon": "0.0.1",
     "ferd-bart": "0.0.2",
+    "ferd-directions": "0.0.4",
     "ferd-giffy": "0.0.1",
     "ferd-hi": "0.0.1",
     "ferd-presence": "0.0.1",
@@ -44,6 +45,7 @@
   "ferd_modules": [
     "bacon",
     "bart",
+    "directions",
     "hi",
     "presence",
     "translate",
