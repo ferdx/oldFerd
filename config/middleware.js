@@ -15,4 +15,4 @@ module.exports = function (app, express) {
 
   // require necessary route files
   require('../api/users/userRoutes.js')(userRouter);
-}
+};

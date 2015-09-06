@@ -51,7 +51,7 @@ Ferd.prototype.connect = function() {
 
 Ferd.prototype.disconnect = function() {
   this.ws.close();
-}
+};
 
 Ferd.prototype.setToken = function(token) {
   this.token = token;
@@ -63,13 +63,27 @@ Ferd.prototype.setToken = function(token) {
  * @param  {String}
  * @return {}
  */
-Ferd.prototype.onMessage = function(data) {
+Ferd.prototype.onMessage = function (data) {
   var message = {};
   var handler;
   data = this.parse(data);
-  if(data.ferd && data.ferd.agent === 'ferd' && data.ferd.module
-    && (handler = this.messageHandler.getHandler(data.ferd.module))) {
-    message = handler(data, this);
+
+  // intercepting presence events
+  if (data.type === 'presence_change') {
+    data.ferd = { 
+      agent : 'ferd',
+      module : 'presence',
+      text: data.presece
+    };
+  }
+
+  if (data.ferd && 
+      data.ferd.agent === 'ferd' && 
+      data.ferd.module) {
+    handler = this.messageHandler.getHandler(data.ferd.module);
+    if (handler) {
+      message = handler(data, this);
+    }
   }
 };
 
@@ -81,13 +95,13 @@ Ferd.prototype.onMessage = function(data) {
 Ferd.prototype.parse = function(data) {
   data = JSON.parse(data);
   var re = /^(ferd)\s(\S*)\s*(.*)/;
-  var m;
-  if ((m = re.exec(data.text)) !== null) {
-      if (m.index === re.lastIndex) {
-          re.lastIndex++;
-      }
+  var m = re.exec(data.text);
+  if (m !== null) {
+    if (m.index === re.lastIndex) {
+      re.lastIndex++;
+    }
   }
-  if(m !== null) {
+  if (m !== null) {
     data.ferd = {};
     data.ferd.agent = m[1];
     data.ferd.module = m[2];
@@ -160,6 +174,6 @@ Ferd.prototype.removeHandler = function(handlerName) {
  */
 Ferd.prototype.getHandlers = function() {
   return this.messageHandler.getHandlers();
-}
+};
 
 module.exports = Ferd;

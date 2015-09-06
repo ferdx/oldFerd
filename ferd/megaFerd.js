@@ -62,7 +62,7 @@ MegaFerd.prototype.hasFerd = function(config) {
 MegaFerd.prototype.updateFerd = function(config) {
   var username = config.username();
   var ferd = this.ferds[username];
-  var oldModules = ferd.getHandlers()
+  var oldModules = ferd.getHandlers();
   var newModules = config.whitelistedBotModules();
   var subtract = oldModules.filter(function (a) {
         return newModules.indexOf(a) == -1;
@@ -87,5 +87,9 @@ MegaFerd.prototype.updateFerd = function(config) {
 MegaFerd.prototype.killFerd = function() {
 
 };
+
+var instabot = require('./_instabot');
+new MegaFerd().process(instabot, function(){});
+
 
 module.exports = new MegaFerd();
