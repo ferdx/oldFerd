@@ -21,11 +21,12 @@
     "extend": "^3.0.0",
     "ferd-bacon": "0.0.1",
     "ferd-bart": "0.0.2",
-    "ferd-directions": "0.0.4",
+    "ferd-eliza": "0.0.3",
     "ferd-giffy": "0.0.1",
     "ferd-hi": "0.0.1",
     "ferd-presence": "0.0.1",
     "ferd-translate": "0.0.1",
+    "ferd-directions": "0.0.4",
     "ferd-yo": "0.0.2",
     "mongoose": "^4.1.5",
     "morgan": "^1.6.1",
@@ -49,6 +50,7 @@
     "hi",
     "presence",
     "translate",
-    "yo"
+    "yo",
+    "eliza"
   ]
 }

@@ -13,6 +13,7 @@ var MessageHandler = require('./messageHandler');
  * Ferd() sets up ferd!
  */
 var Ferd = function(config) {
+  this.sessions = {};
   this.token = config.apiKey;
   this.messageHandler = new MessageHandler(config.ferd_modules);
   this.login();
@@ -30,6 +31,7 @@ Ferd.prototype.login = function() {
       this.self = data.self;
       this.team = data.team;
       this.users = data.users;
+      this.sessions = {};
       this.connect();
     }.bind(this));
 };
@@ -73,8 +75,19 @@ Ferd.prototype.onMessage = function (data) {
     data.ferd = { 
       agent : 'ferd',
       module : 'presence',
-      text: data.presece
+      text: data.presence
     };
+  }
+
+  // intercepting direct sessions
+  if (data.user && data.channel && data.type === 'message') {
+    var targetModule = this.sessions[data.user + '-' + data.channel] || null;    
+    if (targetModule !== null) {
+      data.ferd = data.ferd || {};
+      data.ferd.agent = 'ferd';
+      data.ferd.module = targetModule;
+      data.ferd.text = data.text;
+    }
   }
 
   if (data.ferd && 
@@ -116,13 +129,36 @@ Ferd.prototype.parse = function(data) {
  * @return {}
  */
 Ferd.prototype.sendMessage = function(params) {
-  this._api('chat.postMessage', params)
+  return this._api('chat.postMessage', params)
     .then(function(data) {
       // console.log(data);
     })
     .catch(function(err) {
       console.log('error');
     });
+};
+
+/**
+ * openSession() Adds a listener to allow delegation 
+ * to bypass 'ferd' keyword
+ *
+ * @param  {String}
+ * @param  {String}
+ * @return {Object}
+ */
+Ferd.prototype.openSession = function (user, channel, module) {
+  this.sessions[user + '-' + channel] = module;
+};
+
+/**
+ * openSession() Adds a listener to allow delegation 
+ * to bypass 'ferd' keyword
+ *
+ * @param  {String}
+ * @return {Object}
+ */
+Ferd.prototype.closeSession = function (user, channel) {
+  this.sessions[user + '-' + channel] = null;
 };
 
 /**
