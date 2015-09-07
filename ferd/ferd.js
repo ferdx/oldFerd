@@ -31,6 +31,7 @@ Ferd.prototype.login = function() {
       this.self = data.self;
       this.team = data.team;
       this.users = data.users;
+      this.sessions = {};
       this.connect();
     }.bind(this));
 };
@@ -79,12 +80,13 @@ Ferd.prototype.onMessage = function (data) {
   }
 
   // intercepting direct sessions
-  if (data.user && data.channel) {
+  if (data.user && data.channel && data.type === 'message') {
     var targetModule = this.sessions[data.user + '-' + data.channel] || null;    
     if (targetModule !== null) {
       data.ferd = data.ferd || {};
       data.ferd.agent = 'ferd';
       data.ferd.module = targetModule;
+      data.ferd.text = data.text;
     }
   }
 
